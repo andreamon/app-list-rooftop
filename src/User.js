@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Spinner } from "react-bootstrap";
+import { Table, Spinner } from "react-bootstrap";
 
 function Users() {
   const baseURL = "https://fakerapi.it/api/v1/users";
@@ -11,17 +11,35 @@ function Users() {
     });
   }, []);
   return (
-    <>
+    <div className="container-center">
       {users ? (
-        <p className="container-center">Aca los usuarios</p>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Username</th>
+            </tr>
+          </thead>
+          <tbody>
+              
+            <tr>
+              <td>1</td>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+          </tbody>
+        </Table>
       ) : (
-        <div className="container-spinner">
+        // <div className="container-spinner">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Cargando...</span>
           </Spinner>
-        </div>
+        // </div>
       )}
-    </>
+    </div>
   );
 }
 export default Users;
