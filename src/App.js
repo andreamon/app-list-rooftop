@@ -1,5 +1,5 @@
 import { Container, Navbar, Nav } from "react-bootstrap";
-import {User} from "./User.js";
+import User from "./User.js";
 
 function App() {
   return (

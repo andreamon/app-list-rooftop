@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Spinner } from "react-bootstrap";
 
 function Users() {
   const baseURL = "https://fakerapi.it/api/v1/users";
@@ -9,10 +10,18 @@ function Users() {
       setUsers(res.data);
     });
   }, []);
-  return(
-      <div>
-          {users ? <p>Aca los usuarios</p> : <p>Cargando</p>}
-      </div>
-  )
+  return (
+    <>
+      {users ? (
+        <p className="container-center">Aca los usuarios</p>
+      ) : (
+        <div className="container-spinner">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </Spinner>
+        </div>
+      )}
+    </>
+  );
 }
 export default Users;
