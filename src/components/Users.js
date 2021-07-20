@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Table } from "react-bootstrap";
 
-function User() {
+function Users() {
   const baseURL = "https://fakerapi.it/api/v1/users";
   const [users, setUsers] = useState([]);
   console.log(users);
@@ -43,4 +43,4 @@ function User() {
     </Table>
   );
 }
-export default User;
+export default Users;

@@ -1,5 +1,7 @@
 import { Container, Navbar, Nav } from "react-bootstrap";
-import User from "./User.js";
+// import User from "./User.js";
+import Books from "../src/components/Books";
+import Users from "../src/components/Users";
 
 function App() {
   return (
@@ -16,7 +18,8 @@ function App() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    <User />
+    <Books />
+    <Users />
     </>
   );
 }
