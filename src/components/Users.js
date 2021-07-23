@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, Row, Col } from "react-bootstrap";
+import Pagination from "./Pagination";
 
 function Users() {
-	const baseURL = "https://fakerapi.it/api/v1/users?_quantity=50";
+	const baseURL = "https://fakerapi.it/api/v1/users?_quantity=100";
 	const [users, setUsers] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [usersPerPage, setUsersPerPage] = useState(10);
-	// console.log(users);
+	const [usersPerPage] = useState(10);
 	useEffect(() => {
 		axios
 			.get(baseURL)
@@ -18,32 +17,63 @@ function Users() {
 			.catch((e) => console.log(e));
 	}, []);
 
-	let indexOfLastUser = currentPage * usersPerPage;
-	// let indexOfFirstUser = ;
+	const indexOfLastUser = currentPage * usersPerPage;
+	const indexOfFirstUser = indexOfLastUser - usersPerPage;
+	const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+	const paginate = (page) => setCurrentPage(page);
 
 	return (
 		<>
-			<Row className="justify-content-center">
-				<Col className="col-title-css" md={1}>
+			<section className="menu-options">
+				<div>
 					<a href="/" className="link-css">
 						<img src="./users.png" alt="users" />
 						<p>Users</p>
 					</a>
-				</Col>
-				<Col className="col-title-css" md={{ span: 1, offset: 1 }}>
+				</div>
+				<div>
 					<a href="/books" className="link-css">
-						<img src="./books.png" alt="users" />
+						<img src="./books.png" alt="books" />
 						<p>Books</p>
 					</a>
-				</Col>
-				<Col className="col-title-css" md={{ span: 1, offset: 1 }}>
+				</div>
+				<div>
 					<a href="/" className="link-css">
-						<img src="./places.png" alt="users" />
-						<p>Places</p>
+						<img src="./products.png" alt="products" />
+						<p>Products</p>
 					</a>
-				</Col>
-			</Row>
-			<Row className="justify-content-center">
+				</div>
+			</section>
+
+			<div className="header-table">
+				<p>Name</p>
+				<p>Username</p>
+				<p>Email</p>
+				<p>Website</p>
+				{/* <p>Image</p> */}
+			</div>
+			<ul className="content-table">
+				{currentUsers.length > 0 ? (
+					currentUsers.map((user) => (
+						// <tr key={user.uuid}>
+						<li key={user.uuid} className="item-content-table">
+							<span>
+								{user.firstname} {user.lastname}
+							</span>
+							<span>{user.username}</span>
+							<span>{user.email}</span>
+							<a href={user.website} rel="noreferrer" target="_blank">
+								{user.website}
+							</a>
+							{/* <span></span> */}
+						</li>
+					))
+				) : (
+					<li>NO SE ENCONTRARON DATOS</li>
+				)}
+			</ul>
+			{/* <Row className="justify-content-center">
 				<Col md={9}>
 					<Table bordered hover responsive size="sm" className="table-center">
 						<thead className="table-head">
@@ -52,16 +82,17 @@ function Users() {
 								<th>Username</th>
 								<th>Email</th>
 								<th>Website</th>
-								{/* <th>IMAGE</th> */}
 							</tr>
 						</thead>
 						<tbody>
-							{users.length > 0 ? (
-								users.map((user) => (
+							{currentUsers.length > 0 ? (
+								currentUsers.map((user) => (
 									<tr key={user.uuid}>
 										<td className="name-detail">
-											<img width="50%" src={user.image} alt="image user" />{" "}
-											<span>{user.firstname} {user.lastname}</span>
+											<img src={user.image} alt="user profile" />{" "}
+											<span>
+												{user.firstname} {user.lastname}
+											</span>
 										</td>
 										<td>{user.username}</td>
 										<td>{user.email}</td>
@@ -70,9 +101,6 @@ function Users() {
 												{user.website}
 											</a>
 										</td>
-										{/* <td>
-									<img width="10%" src={user.image} alt="image user" />
-								</td> */}
 									</tr>
 								))
 							) : (
@@ -83,13 +111,13 @@ function Users() {
 						</tbody>
 					</Table>
 				</Col>
-			</Row>
-			{/* {users.length !== 0 ? (
-				<Pagination className="paginate-center">
-					<Pagination.Prev />
-					<Pagination.Next />
-				</Pagination>
-			) : null} */}
+			</Row> */}
+			<Pagination
+				perPage={usersPerPage}
+				total={users.length}
+				currentPage={currentPage}
+				paginate={paginate}
+			/>
 		</>
 	);
 }
