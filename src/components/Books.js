@@ -1,46 +1,113 @@
 import { useState, useEffect } from "react";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
-import { Table } from "react-bootstrap";
+import Pagination from "./Pagination";
 
 function Books() {
-  const baseURL = "https://fakerapi.it/api/v1/books";
-  const [books, setBooks] = useState([]);
-  console.log(books);
-  useEffect(() => {
-    axios
-      .get(baseURL)
-      .then((res) => {
-        setBooks(res.data.data);
-        console.log(res.data.data);
-      })
-      .catch((e) => console.log(e));
-  }, []);
+	const baseURL = "https://fakerapi.it/api/v1/books?_quantity=100";
+	const [books, setBooks] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [booksPerPage] = useState(10);
 
-  return (
-    <Table responsive size="sm">
-      <thead className="text-center">
-        <tr>
-          <th>Título</th>
-          <th>Autor</th>
-          <th>Genero</th>
-        </tr>
-      </thead>
-      <tbody>
-        {books.length > 0 ? (
-          books.map((book) => (
-            <tr key={book.isbn}>
-              <td>{book.title}</td>
-              <td>{book.author}</td>
-              <td>{book.genre}</td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td>NO SE ENCONTRARON DATOS</td>
-          </tr>
-        )}
-      </tbody>
-    </Table>
-  );
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const [imageSelected, setImageSelected] = useState("");
+
+	const handleShow = (urlImage) => {
+		console.log(urlImage);
+		setImageSelected(urlImage);
+		setShow(true);
+	};
+	useEffect(() => {
+		axios
+			.get(baseURL)
+			.then((res) => {
+				setBooks(res.data.data);
+			})
+			.catch((e) => console.log(e));
+	}, []);
+
+	const indexOfLastBook = currentPage * booksPerPage;
+	const indexOfFirstbook = indexOfLastBook - booksPerPage;
+	const currentBooks = books.slice(indexOfFirstbook, indexOfLastBook);
+
+	const paginate = (page) => setCurrentPage(page);
+
+	return (
+		<>
+			<section className="menu-options">
+				<div>
+					<a href="/" className="link-css">
+						<img src="./users.png" alt="users" />
+						<p>Users</p>
+					</a>
+				</div>
+				<div>
+					<a href="/books" className="link-css">
+						<img src="./books.png" alt="books" />
+						<p>Books</p>
+					</a>
+				</div>
+				<div>
+					<a href="/products" className="link-css">
+						<img src="./products.png" alt="products" />
+						<p>Products</p>
+					</a>
+				</div>
+			</section>
+
+			<div className="header-table">
+				<p>Title</p>
+				<p>Author</p>
+				<p>Genre</p>
+				<p>Image</p>
+			</div>
+			<ul className="content-table">
+				{currentBooks.length > 0 ? (
+					currentBooks.map((book) => (
+						<li key={book.isbn} className="item-content-table">
+							<span>{book.title}</span>
+							<span>{book.author}</span>
+							<span>{book.genre}</span>
+
+							<button className="btn-fa" onClick={() => handleShow(book.image)}>
+								<FontAwesomeIcon
+									icon={faCamera}
+									style={{ color: "#0098e0" }}
+									size="lg"
+								/>
+							</button>
+						</li>
+					))
+				) : (
+					<li>NO SE ENCONTRARON DATOS</li>
+				)}
+			</ul>
+			<Pagination
+				perPage={booksPerPage}
+				total={books.length}
+				currentPage={currentPage}
+				paginate={paginate}
+			/>
+			<Modal
+				show={show}
+				onHide={handleClose}
+				backdrop="static"
+				keyboard={false}
+			>
+				<Modal.Body>
+					<img src={imageSelected} alt="user profile" className="image-modal" />
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="danger" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
 }
+
 export default Books;

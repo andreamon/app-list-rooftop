@@ -5,11 +5,11 @@ import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 import Pagination from "./Pagination";
 
-function Users() {
-	const baseURL = "https://fakerapi.it/api/v1/users?_quantity=100";
-	const [users, setUsers] = useState([]);
+function Products() {
+	const baseURL = "https://fakerapi.it/api/v1/products?_quantity=100";
+	const [products, setProducts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [usersPerPage] = useState(10);
+	const [productsPerPage] = useState(10);
 
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
@@ -24,14 +24,17 @@ function Users() {
 		axios
 			.get(baseURL)
 			.then((res) => {
-				setUsers(res.data.data);
+				setProducts(res.data.data);
 			})
 			.catch((e) => console.log(e));
 	}, []);
 
-	const indexOfLastUser = currentPage * usersPerPage;
-	const indexOfFirstUser = indexOfLastUser - usersPerPage;
-	const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+	const indexOfLastProduct = currentPage * productsPerPage;
+	const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+	const currentProducts = products.slice(
+		indexOfFirstProduct,
+		indexOfLastProduct
+	);
 
 	const paginate = (page) => setCurrentPage(page);
 
@@ -59,25 +62,18 @@ function Users() {
 			</section>
 
 			<div className="header-table">
-				<p>Name</p>
-				<p>Username</p>
-				<p>Email</p>
-				<p>Website</p>
+				<p>Product Name</p>
+				<p>Description</p>
 				<p>Image</p>
 			</div>
 			<ul className="content-table">
-				{currentUsers.length > 0 ? (
-					currentUsers.map((user) => (
-						<li key={user.uuid} className="item-content-table">
-							<span>
-								{user.firstname} {user.lastname}
-							</span>
-							<span>{user.username}</span>
-							<span>{user.email}</span>
-							<a href={user.website} rel="noreferrer" target="_blank">
-								{user.website}
-							</a>
-							<button className="btn-fa" onClick={() => handleShow(user.image)}>
+				{currentProducts.length > 0 ? (
+					currentProducts.map((prod) => (
+						<li key={prod.ean} className="item-content-table">
+							<span>{prod.name}</span>
+							<span>{prod.description}</span>
+
+							<button className="btn-fa" onClick={() => handleShow(prod.image)}>
 								<FontAwesomeIcon
 									icon={faCamera}
 									style={{ color: "#0098e0" }}
@@ -91,8 +87,8 @@ function Users() {
 				)}
 			</ul>
 			<Pagination
-				perPage={usersPerPage}
-				total={users.length}
+				perPage={productsPerPage}
+				total={products.length}
 				currentPage={currentPage}
 				paginate={paginate}
 			/>
@@ -114,4 +110,4 @@ function Users() {
 		</>
 	);
 }
-export default Users;
+export default Products;
