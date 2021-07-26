@@ -188,3 +188,8 @@ button:disabled {
 	font-weight: bold;
 	font-size: 1.2rem;
 }
+@media screen and (max-width: 625px) {
+	body {
+		font-size: 12px;
+	}
+}
