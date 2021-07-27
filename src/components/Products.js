@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 import Pagination from "./Pagination";
+import Menu from "./Menu";
 
 function Products() {
 	const baseURL = "https://fakerapi.it/api/v1/products?_quantity=100";
@@ -40,26 +41,7 @@ function Products() {
 
 	return (
 		<>
-			<section className="menu-options">
-				<div>
-					<a href="/" className="link-css">
-						<img src="./users.png" alt="users" />
-						<p>Users</p>
-					</a>
-				</div>
-				<div>
-					<a href="/books" className="link-css">
-						<img src="./books.png" alt="books" />
-						<p>Books</p>
-					</a>
-				</div>
-				<div>
-					<a href="/products" className="link-css">
-						<img src="./products.png" alt="products" />
-						<p>Products</p>
-					</a>
-				</div>
-			</section>
+			<Menu />
 
 			<div className="header-table">
 				<p>Product Name</p>
